@@ -1,23 +1,21 @@
 "use client"
 import { ImageWithFallback } from "./figma/ImageWithFallback";
-import { Button } from "./ui/button";
-import { ArrowRight, MapPin, Users, Waves, Star, Calendar, Users2 } from "lucide-react";
+import { MapPin, Users, Waves, Star, Calendar, Users2 } from "lucide-react";
 import { motion } from "framer-motion";
-import Link from "next/link";
 import adventure1 from "@/gallery/adventure-1.jpg"
 import adventure2 from "@/gallery/adventure-2.jpg"
 import outdoor1 from "@/gallery/outdoor-game-1.jpg"
 import gateSchoolTrip from "@/gallery/gate-school-trip.jpg"
 import diamondHallWedding from "@/gallery/diamond-hall-wedding.jpg"
 import turf from "@/gallery/turf.jpg"
-import diamond2 from "@/gallery/diamond-2.jpg"
 import room1 from "@/gallery/room-1.jpg"
 import woodyRestaurant1 from "@/gallery/woody-restaurant-1.jpg"
 import { useState } from "react";
+import type { StaticImageData } from "next/image";
 
 interface GalleryItem {
   id: string;
-  image: any;
+  image: StaticImageData;
   title: string;
   description: string;
   icon: React.ReactNode;
@@ -27,7 +25,7 @@ interface GalleryItem {
   area: string;
   features: string[];
   pricing?: string;
-  additionalImages?: any[];
+  additionalImages?: StaticImageData[];
   rating?: number;
   duration?: string;
 }
@@ -134,15 +132,6 @@ export function HomeGallerySection() {
     }
   ];
 
-  const container = {
-    hidden: { opacity: 0 },
-    show: { opacity: 1, transition: { staggerChildren: 0.1 } }
-  };
-
-  const item = {
-    hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.5 } }
-  };
 
   return (
     <section id="gallery" className="py-20 bg-gradient-to-br from-gray-50 to-white">
