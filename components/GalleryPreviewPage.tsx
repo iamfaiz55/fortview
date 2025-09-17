@@ -82,7 +82,7 @@ export function GalleryPreviewPage() {
 
   // Handle URL parameter to show specific item
   useEffect(() => {
-    const itemId = searchParams.get('item');
+    const itemId = searchParams?.get('item');
     if (itemId) {
       const item = galleryItems.find(galleryItem => galleryItem.id === itemId);
       if (item) {
@@ -154,7 +154,7 @@ export function GalleryPreviewPage() {
                   height={600}
                   sizes="(max-width: 768px) 100vw, 50vw"
                   className="w-full h-full object-cover"
-                  quality={90}
+                  quality={75}
                 />
                 
                 {/* Image Navigation */}

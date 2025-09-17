@@ -99,7 +99,7 @@ export function ActivitiesSection() {
       color: "from-green-500 to-lime-600",
       bgColor: "bg-green-50",
       iconBg: "bg-green-100",
-      features: ["Kids Club", "Family Games", "Indoor Games", "Outdoor Games"],
+      features: ["Kids Club", "Family Games", "Indoor Games", "Outdoor Games", "Antakshari", "Keraoke", "Birthday paarties", "Daandiya", "Rangapanchami", "Raksha Bandhan", "Marriage Anniversary ", "GetTogethers", "Reunion"],
       detailedDescription:
         "Create lasting family memories with our specially designed family activities. Safe, fun, and engaging experiences that bring families together for quality time.",
       images: ["/gallery/family-1.jpg","/gallery/family-2.jpg","/gallery/family-3.jpg","/gallery/family-4.jpg"],
@@ -116,7 +116,7 @@ export function ActivitiesSection() {
       color: "from-indigo-500 to-purple-600",
       bgColor: "bg-indigo-50",
       iconBg: "bg-indigo-100",
-      features: ["Sunrise Photography", "Nature Walks", "Portrait Sessions", "Selfie Points"],
+      features: ["Sunrise Photography", "Nature Walks", "Portrait Sessions", "Selfie Points", "Pre Wedding Shoot ", "Fancy Dress", ],
       detailedDescription:
         "Capture the beauty of our resort and surrounding nature with professional photography guidance. Learn composition techniques and create stunning memories.",
       images: ["/gallery/photography-1.jpg","/gallery/photography-2.jpg","/gallery/photography-3.jpg","/gallery/photography-4.jpg"],
@@ -159,7 +159,12 @@ export function ActivitiesSection() {
         "Dessert Station",
         "Tea & Coffee",
         "Mocktails",
-        "Continental"
+        "Continental",
+        "Woody Restaurant",
+        "Hill View Restaurant",
+        "Coffee Shop Pizza & Continental",
+        "Chaupati (Food Mall)"
+        
       ],
       detailedDescription:
         "Savor delicious cuisines with our curated food and beverage experiences. From fine dining to seasonal specialties and live kitchen counters, there’s something for everyone to enjoy.",
