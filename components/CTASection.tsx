@@ -204,7 +204,7 @@ export function CTASection() {
                   <Phone className="w-8 h-8 text-emerald-300" />
                 </div>
                 <div className="font-semibold text-lg mb-2">Call Us</div>
-                <div className="opacity-90 text-lg">+1 (555) 123-4567</div>
+                <div className="opacity-90 text-lg">+91 9545 301 888</div>
               </motion.div>
               
               <motion.div 

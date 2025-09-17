@@ -5,22 +5,22 @@ import { motion } from "framer-motion";
 export function Footer() {
   const quickLinks = [
     "Rooms & Suites",
-    "Adventure Activities", 
+    "Adventure Park", 
     "Banquet Venues",
-    "Dining Options",
+    "Food Zone (Pure Veg)",
     "Spa & Wellness",
-    "Photo Gallery",
+    "Gallery",
     "Contact Us"
   ];
 
   const activities = [
-    "Water Zorbing",
-    "Rain Dance",
-    "Zipline Adventure",
-    "Rock Climbing",
-    "Team Building",
-    "Kids' Zone",
-    "Nature Walks"
+    "Outdoor Adventure",
+    "Indoor Adventure",
+    "Ride Adventure",
+    "Entertainment",
+    "Training Zone",
+    "Aviary",
+    "Wedding Zone"
   ];
 
   const container = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.12 } } };
@@ -34,10 +34,10 @@ export function Footer() {
           <motion.div variants={item} className="lg:col-span-1">
             <div className="flex items-center space-x-2 mb-6">
               <div className="w-8 h-8 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-full"></div>
-              <span className="text-xl font-bold">WildVenture Resort</span>
+              <span className="text-xl font-bold">Fort View Resorts</span>
             </div>
             <p className="text-gray-300 mb-6 leading-relaxed">
-              India's premier adventure resort offering thrilling activities, comfortable accommodations, and unforgettable experiences for families and corporate groups.
+              Located in natural scenic beauty near the world heritage Ellora and within the periphery of the historical Deogiri Fort. A place for relief from mental fatigue & physical stress with eco-friendly concepts to preserve the natural environment.
             </p>
             <div className="flex space-x-4">
               <a href="#" className="w-10 h-10 bg-emerald-600 rounded-full flex items-center justify-center hover:bg-emerald-700 transition-colors">
@@ -90,23 +90,23 @@ export function Footer() {
               <div className="flex items-start space-x-3">
                 <MapPin className="w-5 h-5 text-emerald-500 mt-1 flex-shrink-0" />
                 <div className="text-gray-300">
-                  <div>Mountain View Resort Complex</div>
-                  <div>Adventure Valley, Hill Station</div>
-                  <div>Uttarakhand, India - 123456</div>
+                  <div>Beside H2O Water Park, Near Daultabad Abdi Mandi Gut No.13 Elora Road</div>
+                  <div>At post Daultabad, Dist. Chh Sambhaji nagar (Aurangabad)</div>
+                  <div>Maharashtra, India</div>
                 </div>
               </div>
               <div className="flex items-center space-x-3">
                 <Phone className="w-5 h-5 text-emerald-500" />
                 <div className="text-gray-300">
-                  <div>+1 (555) 123-4567</div>
-                  <div>+1 (555) 765-4321</div>
+                  <div>+91 9545 301 888</div>
+                  <div>+91 8888 895 472</div>
+                  <div>+91 8888 888 409</div>
                 </div>
               </div>
               <div className="flex items-center space-x-3">
                 <Mail className="w-5 h-5 text-emerald-500" />
                 <div className="text-gray-300">
-                  <div>info@wildventureresort.com</div>
-                  <div>bookings@wildventureresort.com</div>
+                  <div>mail@fortviewresort.com</div>
                 </div>
               </div>
             </div>
@@ -117,7 +117,7 @@ export function Footer() {
         <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true, amount: 0.2 }} transition={{ duration: 0.6 }} className="border-t border-gray-800 mt-12 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <div className="text-gray-400 text-sm">
-              © 2024 WildVenture Resort. All rights reserved.
+              © 2024 Fort View Resorts. All rights reserved.
             </div>
             <div className="flex space-x-6 text-sm">
               <a href="#" className="text-gray-400 hover:text-emerald-400 transition-colors">Privacy Policy</a>

@@ -1,7 +1,8 @@
 "use client"
 import { ImageWithFallback } from "./figma/ImageWithFallback";
-import { MapPin, Users, Waves, Star, Calendar, Users2 } from "lucide-react";
-import { motion } from "framer-motion";
+import { MapPin, Users, Waves, Star, Calendar, Users2, X, ChevronLeft, ChevronRight } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Dialog, DialogContent } from "./ui/dialog";
 import adventure1 from "@/gallery/adventure-1.jpg"
 import adventure2 from "@/gallery/adventure-2.jpg"
 import outdoor1 from "@/gallery/outdoor-game-1.jpg"
@@ -32,6 +33,18 @@ interface GalleryItem {
 
 export function HomeGallerySection() {
     const [activeId, setActiveId] = useState<string | null>(null);
+    const [selectedImage, setSelectedImage] = useState<GalleryItem | null>(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleImageClick = (item: GalleryItem) => {
+    setSelectedImage(item);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedImage(null);
+  };
 
   const galleryItems: GalleryItem[] = [
     {
@@ -177,6 +190,9 @@ export function HomeGallerySection() {
                   // only for small screens, toggle active
                   if (window.innerWidth < 768) {
                     setActiveId(activeId === item.id ? null : item.id);
+                  } else {
+                    // For desktop, open modal
+                    handleImageClick(item);
                   }
                 }}
               >
@@ -221,6 +237,66 @@ export function HomeGallerySection() {
           })}
         </div>
       </div>
+
+      {/* Image Modal */}
+      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+        <DialogContent className="max-w-4xl w-full h-[80vh] p-0 overflow-hidden">
+          <div className="relative w-full h-full">
+            {selectedImage && (
+              <>
+                {/* Close Button */}
+                <button
+                  onClick={closeModal}
+                  className="absolute top-4 right-4 z-10 bg-black/50 hover:bg-black/70 text-white rounded-full p-2 transition-colors"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+
+                {/* Image */}
+                <div className="w-full h-full">
+                  <ImageWithFallback
+                    src={selectedImage.image}
+                    alt={selectedImage.title}
+                    fill
+                    className="w-full h-full object-contain"
+                    quality={95}
+                  />
+                </div>
+
+                {/* Image Info Overlay */}
+                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6 text-white">
+                  <div className="flex items-center space-x-2 mb-2">
+                    <div className="bg-white/20 rounded-full p-1">
+                      {selectedImage.icon}
+                    </div>
+                    <span className="text-sm font-medium opacity-90">{selectedImage.category}</span>
+                  </div>
+                  <h3 className="text-2xl font-bold mb-2">{selectedImage.title}</h3>
+                  <p className="text-lg opacity-90 mb-3">{selectedImage.description}</p>
+                  <div className="flex items-center space-x-4 text-sm">
+                    {selectedImage.rating && (
+                      <div className="flex items-center space-x-1">
+                        <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                        <span>{selectedImage.rating}</span>
+                      </div>
+                    )}
+                    <div className="flex items-center space-x-1">
+                      <Users2 className="w-4 h-4" />
+                      <span>{selectedImage.capacity}</span>
+                    </div>
+                    {selectedImage.duration && (
+                      <div className="flex items-center space-x-1">
+                        <Calendar className="w-4 h-4" />
+                        <span>{selectedImage.duration}</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
     </section>
   );
 }

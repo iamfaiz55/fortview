@@ -5,9 +5,9 @@ import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "./ui/carousel";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import slide1 from "@/gallery/18.jpg";
-import slide2 from "@/gallery/adventure-2.jpg";
-import slide3 from "@/gallery/woody-restaurant-top.jpg";
+import slide1 from "@/gallery/14.jpg";
+import slide2 from "@/gallery/17.1.jpg";
+import slide3 from "@/gallery/18-1.jpg";
 
 export function HeroSection() {
   const slides = [
@@ -15,6 +15,9 @@ export function HeroSection() {
     { image: slide2, title: "Family Fun & Kids Activities", desc: "Safe, colorful experiences designed for unforgettable family time." },
     { image: slide3, title: "Signature Dining & Evenings", desc: "Savor curated menus with views across our scenic landscape." },
   ];
+
+  // Debug: Log the slide3 image to check if it's loading
+  console.log('Slide3 image:', slide3);
 
   const [api, setApi] = useState<any>(null);
   const [current, setCurrent] = useState(0);
@@ -40,7 +43,7 @@ export function HeroSection() {
           <CarouselContent className="h-full">
             {slides.map((s, i) => (
               <CarouselItem key={i} className="h-full w-full">
-                <div className="relative h-screen w-full flex items-center justify-center">
+                <div className="relative h-screen w-full flex items-center justify-center overflow-hidden">
                   {/* Background Image */}
                   <div className="absolute inset-0 w-full h-full">
                     <ImageWithFallback 
@@ -49,8 +52,12 @@ export function HeroSection() {
                       fill
                       priority={i === 0}
                       sizes="100vw"
-                      className="w-full h-full object-cover" 
+                      className="w-full h-full object-cover object-center" 
                       quality={90}
+                      style={{ 
+                        objectPosition: 'center center',
+                        objectFit: 'cover'
+                      }}
                     />
                     {/* Dark overlay for better text contrast */}
                     <div className="absolute inset-0 bg-black/30" />

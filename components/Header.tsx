@@ -142,9 +142,8 @@ export function Header() {
             href="/"
             className="flex items-center space-x-2 hover:opacity-80 transition-opacity"
           >
-            <Image src="https://fortviewresort.com/public/logo.png" alt="WildVenture Resort" width={32} height={32} />
-            {/* <div className="w-8 h-8 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-full"></div> */}
-            {/* <span className="text-lg sm:text-xl font-bold text-gray-900">WildVenture Resort</span> */}
+            <Image src="https://fortviewresort.com/public/logo.png" alt="Fort View Resorts" width={32} height={32} />
+            <span className="text-lg sm:text-xl font-bold text-gray-900">Fort View Resorts</span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -228,7 +227,7 @@ export function Header() {
           <div className="hidden md:flex items-center space-x-4">
             <div className="flex items-center space-x-2 text-xs md:text-sm text-gray-600">
               <Phone className="w-4 h-4" />
-              <span>+1 (555) 123-4567</span>
+              <span>+91 9545 301 888</span>
             </div>
             <motion.div
               whileHover={{ scale: 1.05 }}
@@ -312,7 +311,7 @@ export function Header() {
                 >
                   <div className="flex items-center space-x-2 text-sm text-gray-600 mb-4 px-4">
                     <Phone className="w-4 h-4" />
-                    <span>+1 (555) 123-4567</span>
+                    <span>+91 9545 301 888</span>
                   </div>
                   <motion.div
                     whileHover={{ scale: 1.02 }}

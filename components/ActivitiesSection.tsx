@@ -1,7 +1,7 @@
 "use client"
 import { motion } from "framer-motion";
 import { Button } from "./ui/button";
-import { ArrowRight, Mountain, Waves, Utensils, Users, Camera, Heart, Space, Sparkles, Zap, Star, X, Clock, MapPin, Users2, ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowRight, Mountain, Waves, Utensils, Users, Camera, Heart, Space, Sparkles, Zap, Star, X, Clock, MapPin, Users2, ChevronLeft, ChevronRight, LucideOctagonPause, Icon, BarrelIcon, Bike, Flower } from "lucide-react";
 import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
 
@@ -27,22 +27,31 @@ export function ActivitiesSection() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
+
+ 
+  
   const activities: Activity[] = [
     {
       icon: <Mountain className="w-8 h-8" />,
       title: "Adventure Activities",
-      description: "Hiking, zip-lining, rock climbing, and nature trails",
+      description: "Hiking, zip-line, wall climbing, zorbing, and nature trails",
       color: "from-emerald-500 to-teal-600",
       bgColor: "bg-emerald-50",
       iconBg: "bg-emerald-100",
-      features: ["Guided Hiking Tours", "Zip-lining Adventures", "Rock Climbing", "Nature Photography"],
-      detailedDescription: "Experience the thrill of adventure in our pristine natural surroundings. Our adventure activities are designed to challenge and excite while ensuring your safety with professional guides and top-quality equipment.",
-      images: [
-        "/gallery/adventure-1.jpg",
-        "/gallery/adventure-2.jpg", 
-        "/gallery/adventure-3.jpg",
-        "/gallery/adventure-4.jpg"
+      features: [
+        "Guided Hiking Tours",
+        "Zip-lining",
+        "Wall Climbing",
+        "Zorbing",
+        "High Ropes",
+        "Adventure Games",
+        "Nature Photography",
+        "Trekking",
+        "Tenting Nights Adventure"
       ],
+      detailedDescription:
+        "Experience the thrill of adventure in our pristine natural surroundings. Our activities are designed to challenge and excite while ensuring your safety with professional guides and top-quality equipment.",
+      images: ["/gallery/adventure-1.jpg","/gallery/adventure-2.jpg","/gallery/adventure-3.jpg","/gallery/adventure-4.jpg"],
       duration: "2-4 hours",
       location: "Mountain Trail & Adventure Zone",
       maxParticipants: "8 people",
@@ -52,18 +61,14 @@ export function ActivitiesSection() {
     {
       icon: <Waves className="w-8 h-8" />,
       title: "Water Sports",
-      description: "Swimming, kayaking, fishing, and water activities",
+      description: "Swimming, water zorbing, and fun water activities",
       color: "from-blue-500 to-cyan-600",
       bgColor: "bg-blue-50",
       iconBg: "bg-blue-100",
-      features: ["Swimming Pool", "Kayaking", "Fishing", "Water Aerobics"],
-      detailedDescription: "Dive into crystal clear waters and enjoy a variety of water-based activities. From peaceful kayaking to exciting water sports, our facilities offer something for every water enthusiast.",
-      images: [
-        "/gallery/water-1.jpg",
-        "/gallery/water-2.jpg",
-        "/gallery/water-3.jpg", 
-        "/gallery/water-4.jpg"
-      ],
+      features: ["Swimming Pool", "Water Zorbing", "Rain Dance"],
+      detailedDescription:
+        "Dive into crystal-clear waters and enjoy a variety of water-based activities. From peaceful swims to exciting water zorbing, our facilities offer something for every water enthusiast.",
+      images: ["/gallery/water-1.jpg","/gallery/water-2.jpg","/gallery/water-3.jpg","/gallery/water-4.jpg"],
       duration: "1-3 hours",
       location: "Resort Lake & Swimming Pool",
       maxParticipants: "12 people",
@@ -71,41 +76,16 @@ export function ActivitiesSection() {
       pricing: "Starting from $65 per person"
     },
     {
-      icon: <Utensils className="w-8 h-8" />,
-      title: "Culinary Experiences",
-      description: "Fine dining, cooking classes, and local cuisine",
-      color: "from-orange-500 to-red-600",
-      bgColor: "bg-orange-50",
-      iconBg: "bg-orange-100",
-      features: ["Fine Dining", "Cooking Classes", "Wine Tasting", "Local Cuisine"],
-      detailedDescription: "Savor the flavors of our region with our world-class culinary experiences. Learn from master chefs, taste exquisite wines, and discover the secrets of local cuisine.",
-      images: [
-        "/gallery/culinary-1.jpg",
-        "/gallery/culinary-2.jpg",
-        "/gallery/culinary-3.jpg",
-        "/gallery/culinary-4.jpg"
-      ],
-      duration: "2-5 hours",
-      location: "Chef's Kitchen & Wine Cellar",
-      maxParticipants: "10 people",
-      included: ["Master Chef Instruction", "Premium Ingredients", "Wine Pairing", "Recipe Book"],
-      pricing: "Starting from $120 per person"
-    },
-    {
-      icon: <Space className="w-8 h-8" />,
+      icon: <Flower className="w-8 h-8" />,
       title: "Wellness & Spa",
-      description: "Relaxation, massage therapy, and wellness programs",
+      description: "Relaxation, massage therapy, and holistic wellness programs",
       color: "from-purple-500 to-pink-600",
       bgColor: "bg-purple-50",
       iconBg: "bg-purple-100",
-      features: ["Spa Treatments", "Yoga Classes", "Meditation", "Wellness Programs"],
-      detailedDescription: "Rejuvenate your mind, body, and soul in our tranquil wellness sanctuary. Experience world-class spa treatments, guided meditation, and yoga sessions in our peaceful environment.",
-      images: [
-        "/gallery/spa-1.jpg",
-        "/gallery/spa-2.jpg",
-        "/gallery/spa-3.jpg",
-        "/gallery/spa-4.jpg"
-      ],
+      features: ["Spa Treatments", "Yoga Classes", "Meditation", "Wellness Programs", "Panchakarma"],
+      detailedDescription:
+        "Rejuvenate your mind, body, and soul in our tranquil wellness sanctuary. Experience world-class spa treatments, guided meditation, and yoga sessions in a peaceful environment.",
+      images: ["/gallery/spa-1.jpg","/gallery/spa-2.jpg","/gallery/spa-3.jpg","/gallery/spa-4.jpg"],
       duration: "1-3 hours",
       location: "Wellness Center & Spa",
       maxParticipants: "6 people",
@@ -119,14 +99,10 @@ export function ActivitiesSection() {
       color: "from-green-500 to-lime-600",
       bgColor: "bg-green-50",
       iconBg: "bg-green-100",
-      features: ["Kids Club", "Family Games", "Movie Nights", "Playground"],
-      detailedDescription: "Create lasting family memories with our specially designed family activities. Safe, fun, and engaging experiences that bring families together for quality time.",
-      images: [
-        "/gallery/family-1.jpg",
-        "/gallery/family-2.jpg",
-        "/gallery/family-3.jpg",
-        "/gallery/family-4.jpg"
-      ],
+      features: ["Kids Club", "Family Games", "Indoor Games", "Outdoor Games"],
+      detailedDescription:
+        "Create lasting family memories with our specially designed family activities. Safe, fun, and engaging experiences that bring families together for quality time.",
+      images: ["/gallery/family-1.jpg","/gallery/family-2.jpg","/gallery/family-3.jpg","/gallery/family-4.jpg"],
       duration: "2-4 hours",
       location: "Family Activity Center",
       maxParticipants: "20 people",
@@ -140,22 +116,62 @@ export function ActivitiesSection() {
       color: "from-indigo-500 to-purple-600",
       bgColor: "bg-indigo-50",
       iconBg: "bg-indigo-100",
-      features: ["Sunrise Photography", "Nature Walks", "Portrait Sessions", "Photo Workshops"],
-      detailedDescription: "Capture the beauty of our resort and surrounding nature with professional photography guidance. Learn composition techniques and create stunning memories.",
-      images: [
-        "/gallery/photography-1.jpg",
-        "/gallery/photography-2.jpg",
-        "/gallery/photography-3.jpg",
-        "/gallery/photography-4.jpg"
-      ],
+      features: ["Sunrise Photography", "Nature Walks", "Portrait Sessions", "Selfie Points"],
+      detailedDescription:
+        "Capture the beauty of our resort and surrounding nature with professional photography guidance. Learn composition techniques and create stunning memories.",
+      images: ["/gallery/photography-1.jpg","/gallery/photography-2.jpg","/gallery/photography-3.jpg","/gallery/photography-4.jpg"],
       duration: "2-3 hours",
       location: "Nature Trails & Resort Grounds",
       maxParticipants: "6 people",
       included: ["Professional Photographer", "Camera Equipment", "Photo Editing", "Digital Gallery"],
       pricing: "Starting from $95 per person"
+    },
+    {
+      icon: <Bike className="w-8 h-8" />,
+      title: "Riding Activities",
+      description: "Horse riding, camel rides, cycling, and more",
+      color: "from-amber-500 to-orange-600",
+      bgColor: "bg-amber-50",
+      iconBg: "bg-amber-100",
+      features: ["Horse Riding","Bullock Cart Rides","Camel Riding","Buggy Rides","Tractor Tours","Cycling"],
+      detailedDescription:
+        "Explore the charm of traditional and modern rides. From horse and camel rides to cycling and tractor tours, experience fun and adventure while connecting with nature and culture.",
+      images: ["/gallery/riding-1.jpg","/gallery/riding-2.jpg","/gallery/riding-3.jpg","/gallery/riding-4.jpg"],
+      duration: "2-3 hours",
+      location: "Resort Grounds & Riding Trails",
+      maxParticipants: "10 people",
+      included: ["Safety Helmets", "Trained Instructors", "Refreshments", "Basic Riding Gear"],
+      pricing: "Starting from $75 per person"
+    },
+    {
+      icon: <Utensils className="w-8 h-8" />,
+      title: "Food & Beverages",
+      description: "Fine dining, seasonal parties, and live kitchen experiences",
+      color: "from-red-500 to-pink-600",
+      bgColor: "bg-red-50",
+      iconBg: "bg-red-100",
+      features: [
+        "Fine Dining",
+        "Buffet Counters",
+        "Live Kitchen",
+        "Hoorda Party (Seasonal)",
+        "Aam Ras Party (Seasonal)",
+        "Dessert Station",
+        "Tea & Coffee",
+        "Mocktails",
+        "Continental"
+      ],
+      detailedDescription:
+        "Savor delicious cuisines with our curated food and beverage experiences. From fine dining to seasonal specialties and live kitchen counters, there’s something for everyone to enjoy.",
+      images: ["/gallery/food-1.jpg","/gallery/food-2.jpg","/gallery/food-3.jpg","/gallery/food-4.jpg"],
+      duration: "Flexible",
+      location: "Dining Halls & Outdoor Venues",
+      maxParticipants: "Unlimited",
+      included: ["Buffet Access", "Beverages", "Seasonal Specials", "Desserts"],
+      pricing: "Included with packages / À la carte options"
     }
   ];
-
+    
   const container = {
     hidden: { opacity: 0 },
     show: {
