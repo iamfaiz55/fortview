@@ -176,11 +176,12 @@ export function HomeGallerySection() {
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: index * 0.05 }}
                 animate={{ y: [0, -8, 0] }}
                 transition={{
+                  duration: 0.6,
+                  delay: index * 0.05,
                   repeat: Infinity,
-                  duration: 12 + index * 2,
+                  repeatDelay: 12 + index * 2,
                   ease: "easeInOut"
                 }}
                 onClick={() => {
