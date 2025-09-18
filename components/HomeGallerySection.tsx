@@ -105,7 +105,7 @@ export function HomeGallerySection() {
         area: "2,500 sq ft",
         features: ["Natural Rock Formation", "Tropical Vegetation", "Photo Opportunities", "Peaceful Ambiance"],
         pricing: "Included with resort stay",
-        additionalImages: [adventure1, adventure2],
+    
         rating: 4.8,
       duration: "2-3 hours"
       },
@@ -121,7 +121,7 @@ export function HomeGallerySection() {
         area: "15,000 sq ft",
         features: ["Well-Maintained Grass", "Panoramic Views", "Event Setup Available", "Outdoor Seating"],
         pricing: "Starting from $2,500 per event",
-        additionalImages: [outdoor1, turf],
+    
         rating: 4.9,
       duration: "All day"
       },
@@ -137,7 +137,7 @@ export function HomeGallerySection() {
         area: "3,000 sq ft",
         features: ["Age-Appropriate Equipment", "Soft Play Areas", "Supervised Activities", "Safety First"],
         pricing: "Included with family packages",
-        additionalImages: [adventure2, adventure1],
+    
         rating: 4.7,
       duration: "1-2 hours"
       },
@@ -153,7 +153,7 @@ export function HomeGallerySection() {
         area: "400-600 sq ft",
         features: ["Modern Amenities", "Scenic Views", "Premium Bedding", "Private Balcony"],
         pricing: "Starting from $150 per night",
-        additionalImages: [room1, adventure1],
+    
         rating: 4.9,
       duration: "Overnight"
       },
@@ -169,7 +169,7 @@ export function HomeGallerySection() {
         area: "2,000 sq ft",
         features: ["Expert Chefs", "Fresh Ingredients", "Elegant Atmosphere", "Wine Selection"],
         pricing: "Starting from $45 per person",
-        additionalImages: [woodyRestaurant1, diamondHallWedding],
+    
         rating: 4.8,
       duration: "1-2 hours"
       },
@@ -185,7 +185,7 @@ export function HomeGallerySection() {
         area: "5,000-10,000 sq ft",
         features: ["Professional Planning", "Beautiful Decor", "Catering Services", "Photography Spots"],
         pricing: "Starting from $5,000 per event",
-        additionalImages: [diamondHallWedding, gateSchoolTrip],
+    
         rating: 4.9,
       duration: "Full day"
     }
@@ -236,166 +236,190 @@ export function HomeGallerySection() {
       </div>
 
       {/* Enhanced Image Modal */}
-      <Dialog open={isModalOpen} onOpenChange={closeModal}>
-        <DialogContent className="max-w-7xl w-full h-[95vh] p-0 overflow-hidden bg-black/95 backdrop-blur-sm border-0">
-          <AnimatePresence mode="wait">
-            {selectedImage && (
-              <>
-                {/* Accessibility Title and Description - Hidden visually but available to screen readers */}
-                <DialogTitle className="sr-only">
-                  {selectedImage.title} - {selectedImage.category}
-          </DialogTitle>
-                <DialogDescription className="sr-only">
-                  {selectedImage.detailedDescription}. Capacity: {selectedImage.capacity}. Area: {selectedImage.area}.
-                  {selectedImage.duration && ` Duration: ${selectedImage.duration}.`}
-                  {selectedImage.pricing && ` Pricing: ${selectedImage.pricing}.`}
-                </DialogDescription>
+      <Dialog open={isModalOpen} onOpenChange={(open) => (!open ? closeModal() : null)}>
+  <DialogContent
+    className={`
+      w-[min(96vw,1100px)] h-[92vh] p-0
+      bg-white text-slate-900
+      border border-neutral-200 shadow-2xl
+      rounded-xl sm:rounded-2xl
+      backdrop-blur-sm
+      dark:bg-neutral-900 dark:text-neutral-100 dark:border-white/10
+      data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95
+      data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95
+    `}
+  >
+    {selectedImage && (
+      <>
+        <DialogTitle className="sr-only">
+          {selectedImage.title} - {selectedImage.category}
+        </DialogTitle>
+        <DialogDescription className="sr-only">
+          {selectedImage.detailedDescription}. Capacity: {selectedImage.capacity}. Area: {selectedImage.area}.
+          {selectedImage.duration && ` Duration: ${selectedImage.duration}.`}
+          {selectedImage.pricing && ` Pricing: ${selectedImage.pricing}.`}
+        </DialogDescription>
 
-            <div className="relative w-full h-full flex flex-col">
-                  {/* Close Button */}
-                  <button
-                onClick={closeModal}
-                    className="absolute top-6 right-6 z-30 bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white rounded-full p-3 transition-all duration-300 border border-white/20"
-                    aria-label="Close modal"
+        {/* Main layout: allow scroll on mobile, contain on desktop */}
+        <div className="relative flex h-full w-full flex-col lg:flex-row overflow-y-auto lg:overflow-hidden">
+          {/* Sticky Close */}
+          <button
+            onClick={closeModal}
+            className="
+              sticky top-[max(0.75rem,env(safe-area-inset-top))] self-end z-30 mr-3
+              rounded-full p-2 sm:p-3 border
+              bg-white/90 hover:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500
+              border-neutral-200 shadow-md
+              dark:bg-white/10 dark:hover:bg-white/20 dark:border-white/20 dark:text-white
+              transition-all
+            "
+            aria-label="Close modal"
+          >
+            <X className="w-5 h-5 sm:w-6 sm:h-6" />
+          </button>
+
+          {/* LEFT COLUMN: Image (flex-1) + Thumbnails (shrink-0) */}
+          <div className="lg:w-2/3 flex flex-col min-h-0">
+            {/* Image canvas */}
+            <div
+              className="
+                relative flex-1 min-h-0
+                h-[38vh] sm:h-[48vh] lg:h-auto
+                flex items-center justify-center
+                bg-neutral-50 px-2 sm:px-4 pb-2
+                dark:bg-black/90
+              "
+            >
+              <ImageWithFallback
+                src={selectedImage.image}
+                alt={selectedImage.title}
+                width={1400}
+                height={900}
+                className="w-auto h-full max-h-full object-contain rounded-lg sm:rounded-xl shadow-xl"
+                quality={80}
+                priority
+              />
+            </div>
+
+          
+          </div>
+
+          {/* RIGHT PANEL: Header (fixed) + Body (scroll) */}
+          <aside
+            className="
+              lg:w-1/3 min-h-0
+              border-t lg:border-t-0 lg:border-l
+              border-neutral-200 dark:border-white/10
+              bg-gradient-to-b from-white to-neutral-50
+              dark:from-neutral-900 dark:to-neutral-900
+              p-4 sm:p-6 lg:p-7
+              flex flex-col gap-6
+            "
+          >
+            {/* Header stays visible */}
+            <header className="flex items-start justify-between gap-3 shrink-0">
+              <div className="flex items-center gap-2 sm:gap-3">
+                <div className="text-emerald-600 dark:text-emerald-400">{selectedImage.icon}</div>
+                <div>
+                  <h2 className="text-lg sm:text-xl lg:text-2xl font-bold leading-snug">
+                    {selectedImage.title}
+                  </h2>
+                  <span
+                    className="
+                      text-xs sm:text-sm
+                      text-emerald-700 bg-emerald-50
+                      dark:text-emerald-300 dark:bg-emerald-500/20
+                      px-2 py-0.5 rounded-full
+                    "
                   >
-                    <X className="w-6 h-6" />
-                  </button>
-
-                  {/* Main Content Area */}
-                  <div className="flex-1 flex flex-col lg:flex-row">
-                    {/* Image Section */}
-                    <div className="flex-1 flex flex-col">
-                      {/* Main Image */}
-                      <div className="flex-1 flex items-center justify-center bg-black/90 relative min-h-[50vh] lg:min-h-full">
-                        <div className="relative max-h-full max-w-full p-4">
-                          <ImageWithFallback
-                            src={selectedImage.image}
-                            alt={selectedImage.title}
-                            width={1200}
-                            height={800}
-                            className="w-auto h-auto max-h-[60vh] lg:max-h-[75vh] object-contain rounded-2xl shadow-2xl"
-                            quality={75}
-                            priority
-                          />
-                        </div>
+                    {selectedImage.category}
+                  </span>
+                </div>
               </div>
-
-              {/* Thumbnails */}
-              {selectedImage.additionalImages && selectedImage.additionalImages.length > 0 && (
-                        <div className="flex overflow-x-auto gap-4 py-4 px-6 bg-black/80 scrollbar-hide border-t border-white/10">
-                          <div className="flex gap-4 min-w-max">
-                            {selectedImage.additionalImages.map((thumb, idx) => (
-                              <button
-                                key={`${selectedImage.id}-thumb-${idx}`}
-                                onClick={() =>
-                                  setSelectedImage((prev) =>
-                                    prev ? { ...prev, image: thumb } : prev
-                                  )
-                                }
-                                className={`relative flex-shrink-0 w-24 h-16 lg:w-32 lg:h-20 rounded-lg overflow-hidden border-2 transition-all duration-200 ${
-                                  selectedImage.image.src === thumb.src
-                                    ? "border-emerald-500"
-                                    : "border-transparent hover:border-white/50"
-                                }`}
-                                aria-label={`View thumbnail ${idx + 1} of ${selectedImage.title}`}
-                              >
-                                <ImageWithFallback
-                                  src={thumb}
-                                  alt={`Thumbnail ${idx + 1}`}
-                                  fill
-                                  sizes="(max-width: 1024px) 96px, 128px"
-                                  className="object-cover"
-                                  quality={75}
-                                />
-                              </button>
-                  ))}
-                          </div>
+              {selectedImage.rating && (
+                <div className="flex items-center gap-1 text-yellow-600 dark:text-yellow-400 text-sm sm:text-base">
+                  <Star className="w-4 h-4 sm:w-5 sm:h-5 fill-current" />
+                  <span className="font-semibold">{selectedImage.rating}</span>
                 </div>
               )}
-                    </div>
+            </header>
 
-                    {/* Details Panel */}
-                    <div className="w-full lg:w-96 bg-gradient-to-b from-black/95 via-black/90 to-black/95 p-6 lg:p-8 overflow-y-auto">
-                      <div className="space-y-6">
-                        {/* Header */}
-                        <div className="flex items-start justify-between mb-6">
-                          <div className="flex items-center gap-3">
-                            <div className="text-emerald-400">{selectedImage.icon}</div>
-                  <div>
-                              <h2 className="text-2xl font-bold text-white mb-2">
-                                {selectedImage.title}
-                              </h2>
-                              <span className="text-sm text-gray-300 bg-emerald-500/20 px-3 py-1 rounded-full">
-                                {selectedImage.category}
-                              </span>
-                            </div>
+            {/* Scrollable body – never conflicts with thumbnails */}
+            <div className="min-h-0 max-h-full overflow-y-auto pr-1 [&>*+*]:mt-6 mt-2 py-10">
+              {/* Description */}
+              <section>
+                <h3 className="text-sm sm:text-base font-semibold mb-2 sm:mb-3 ">Description</h3>
+                <p className="text-xs sm:text-sm text-slate-700 dark:text-gray-200 leading-relaxed ">
+                  {selectedImage.detailedDescription}
+                </p>
+              </section>
+
+              {/* Details */}
+              <section>
+                <h3 className="text-sm sm:text-base font-semibold mb-2 sm:mb-3">Details</h3>
+                <div className="grid grid-cols-1 gap-2 sm:gap-3">
+                  <div className="rounded-lg p-3 sm:p-4 border border-neutral-200 bg-white dark:bg-white/10 dark:border-white/10">
+                    <div className="text-emerald-700 dark:text-emerald-300 text-xs sm:text-sm font-medium mb-1">
+                      Capacity
+                    </div>
+                    <div className="font-semibold text-sm sm:text-base">{selectedImage.capacity}</div>
                   </div>
-                  {selectedImage.rating && (
-                            <div className="flex items-center gap-1 text-yellow-400">
-                              <Star className="w-5 h-5 fill-current" />
-                      <span className="font-semibold">{selectedImage.rating}</span>
+                  <div className="rounded-lg p-3 sm:p-4 border border-neutral-200 bg-white dark:bg-white/10 dark:border-white/10">
+                    <div className="text-emerald-700 dark:text-emerald-300 text-xs sm:text-sm font-medium mb-1">
+                      Area
                     </div>
-                  )}
-                </div>
-                
-                        {/* Description */}
-                    <div>
-                          <h3 className="text-lg font-semibold text-white mb-3">Description</h3>
-                          <p className="text-gray-200 leading-relaxed">
-                            {selectedImage.detailedDescription}
-                          </p>
-                    </div>
-                        
-                        {/* Details Grid */}
-                    <div>
-                          <h3 className="text-lg font-semibold text-white mb-3">Details</h3>
-                          <div className="grid grid-cols-1 gap-4">
-                            <div className="bg-white/10 rounded-lg p-4">
-                              <div className="text-emerald-400 text-sm font-medium mb-1">Capacity</div>
-                              <div className="text-white font-semibold">{selectedImage.capacity}</div>
-                    </div>
-                            <div className="bg-white/10 rounded-lg p-4">
-                              <div className="text-emerald-400 text-sm font-medium mb-1">Area</div>
-                              <div className="text-white font-semibold">{selectedImage.area}</div>
+                    <div className="font-semibold text-sm sm:text-base">{selectedImage.area}</div>
                   </div>
                   {selectedImage.duration && (
-                              <div className="bg-white/10 rounded-lg p-4">
-                                <div className="text-emerald-400 text-sm font-medium mb-1">Duration</div>
-                                <div className="text-white font-semibold">{selectedImage.duration}</div>
+                    <div className="rounded-lg p-3 sm:p-4 border border-neutral-200 bg-white dark:bg-white/10 dark:border-white/10">
+                      <div className="text-emerald-700 dark:text-emerald-300 text-xs sm:text-sm font-medium mb-1">
+                        Duration
                       </div>
-                            )}
-                            {selectedImage.pricing && (
-                              <div className="bg-white/10 rounded-lg p-4">
-                                <div className="text-emerald-400 text-sm font-medium mb-1">Pricing</div>
-                                <div className="text-white font-semibold">{selectedImage.pricing}</div>
+                      <div className="font-semibold text-sm sm:text-base">{selectedImage.duration}</div>
+                    </div>
+                  )}
+                  {selectedImage.pricing && (
+                    <div className="rounded-lg p-3 sm:p-4 border border-neutral-200 bg-white dark:bg-white/10 dark:border-white/10">
+                      <div className="text-emerald-700 dark:text-emerald-300 text-xs sm:text-sm font-medium mb-1">
+                        Pricing
+                      </div>
+                      <div className="font-semibold text-sm sm:text-base">{selectedImage.pricing}</div>
                     </div>
                   )}
                 </div>
-                </div>
+              </section>
 
-                        {/* Features */}
-                  <div>
-                          <h3 className="text-lg font-semibold text-white mb-3">Features</h3>
-                          <div className="flex flex-wrap gap-2">
-                      {selectedImage.features.map((feature, idx) => (
-                              <span
-                                key={idx}
-                                className="bg-emerald-500/20 text-emerald-300 px-3 py-2 rounded-full text-sm font-medium"
-                              >
-                          {feature}
-                              </span>
-                      ))}
-                          </div>
-                        </div>
-                  </div>
-                    </div>
-                  </div>
+              {/* Features */}
+              <section>
+                <h3 className="text-sm sm:text-base font-semibold mb-2 sm:mb-3">Features</h3>
+                <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                  {selectedImage.features.map((feature, idx) => (
+                    <span
+                      key={idx}
+                      className="
+                        px-2 sm:px-3 py-1 sm:py-1.5 rounded-full
+                        text-[11px] sm:text-xs font-medium
+                        bg-emerald-50 text-emerald-700
+                        dark:bg-emerald-500/20 dark:text-emerald-300
+                      "
+                    >
+                      {feature}
+                    </span>
+                  ))}
                 </div>
-              </>
-          )}
-          </AnimatePresence>
-        </DialogContent>
-      </Dialog>
+              </section>
+            </div>
+          </aside>
+        </div>
+      </>
+    )}
+  </DialogContent>
+</Dialog>
+
+
+
+
+
     </section>
   );
 }
