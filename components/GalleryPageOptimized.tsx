@@ -1,23 +1,20 @@
 "use client"
 import { motion } from "framer-motion";
-import { ImageWithFallback } from "./figma/ImageWithFallback";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback, useRef, useEffect } from "react";
+import Image from "next/image";
 
-// Only import essential images for initial load
+// Only import 3 essential images for initial load to reduce bundle size
 import img1 from "@/gallery/1.jpg";
 import img2 from "@/gallery/2.jpg";
 import img3 from "@/gallery/3.jpg";
-import img4 from "@/gallery/4.jpg";
-import img5 from "@/gallery/5.jpg";
-import adventure1 from "@/gallery/adventure-1.jpg";
-import adventure2 from "@/gallery/adventure-2.jpg";
-import diamondHall from "@/gallery/diamond-hall.jpg";
-import diamondWedding from "@/gallery/diamond-hall-wedding.jpg";
-import silverLawns from "@/gallery/silver-lawns.jpg";
-import turf from "@/gallery/turf.jpg";
 
-// Lazy load other images
-const lazyImages = [
+// All images as lazy-loaded strings for better performance
+const allImages = [
+  { src: "/gallery/1.jpg", category: "General Resort Views" },
+  { src: "/gallery/2.jpg", category: "General Resort Views" },
+  { src: "/gallery/3.jpg", category: "General Resort Views" },
+  { src: "/gallery/4.jpg", category: "General Resort Views" },
+  { src: "/gallery/5.jpg", category: "General Resort Views" },
   { src: "/gallery/6.jpg", category: "General Resort Views" },
   { src: "/gallery/7.jpg", category: "General Resort Views" },
   { src: "/gallery/8.jpg", category: "General Resort Views" },
@@ -36,9 +33,13 @@ const lazyImages = [
   { src: "/gallery/24.jpg", category: "General Resort Views" },
   { src: "/gallery/26.jpg", category: "General Resort Views" },
   { src: "/gallery/27.jpg", category: "General Resort Views" },
+  { src: "/gallery/adventure-1.jpg", category: "Adventure & Activities" },
+  { src: "/gallery/adventure-2.jpg", category: "Adventure & Activities" },
   { src: "/gallery/adventure-3.jpg", category: "Adventure & Activities" },
   { src: "/gallery/adventure-4.jpg", category: "Adventure & Activities" },
+  { src: "/gallery/turf.jpg", category: "Resort Grounds" },
   { src: "/gallery/turf-2.jpg", category: "Resort Grounds" },
+  { src: "/gallery/silver-lawns.jpg", category: "Resort Grounds" },
   { src: "/gallery/outdoor-game-1.jpg", category: "Adventure & Activities" },
   { src: "/gallery/soft-play-1.jpg", category: "Family & Kids" },
   { src: "/gallery/room-1.jpg", category: "Accommodations" },
@@ -48,6 +49,8 @@ const lazyImages = [
   { src: "/gallery/woody-restaurant-1.jpg", category: "Dining" },
   { src: "/gallery/woody-restaurant-2.jpg", category: "Dining" },
   { src: "/gallery/gate-school-trip.jpg", category: "Events & Celebrations" },
+  { src: "/gallery/diamond-hall.jpg", category: "Events & Celebrations" },
+  { src: "/gallery/diamond-hall-wedding.jpg", category: "Events & Celebrations" },
   { src: "/gallery/diamond-2.jpg", category: "Events & Celebrations" },
   { src: "/gallery/day-wedding-setup.jpg", category: "Events & Celebrations" },
   { src: "/gallery/night-wedding.jpg", category: "Events & Celebrations" },
@@ -58,56 +61,67 @@ const lazyImages = [
   { src: "/gallery/antakshiri.jpg", category: "Events & Celebrations" },
 ];
 
-const initialImages = [
-  { img: adventure1, category: "Adventure & Activities" },
-  { img: adventure2, category: "Adventure & Activities" },
-  { img: diamondHall, category: "Events & Celebrations" },
-  { img: diamondWedding, category: "Events & Celebrations" },
-  { img: silverLawns, category: "Resort Grounds" },
-  { img: turf, category: "Resort Grounds" },
-  { img: img1, category: "General Resort Views" },
-  { img: img2, category: "General Resort Views" },
-  { img: img3, category: "General Resort Views" },
-  { img: img4, category: "General Resort Views" },
-  { img: img5, category: "General Resort Views" },
-];
+// Start with only 6 images for faster initial load
+const initialImages = allImages.slice(0, 6);
 
 export function GalleryPageOptimized() {
-  const [loadedImages, setLoadedImages] = useState(initialImages);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [loadedCount, setLoadedCount] = useState(6);
+  const loadMoreRef = useRef<HTMLButtonElement>(null);
 
+  // Get all unique categories from all images, not just loaded ones
   const categories = useMemo(() => {
-    const cats = ["All", ...new Set(loadedImages.map(img => img.category))];
+    const cats = ["All", ...new Set(allImages.map(img => img.category))];
     return cats;
-  }, [loadedImages]);
+  }, []);
 
+  // Filter all images by category, then slice to loaded count
   const filteredImages = useMemo(() => {
-    if (selectedCategory === "All") return loadedImages;
-    return loadedImages.filter(img => img.category === selectedCategory);
-  }, [loadedImages, selectedCategory]);
+    const filtered = selectedCategory === "All" 
+      ? allImages 
+      : allImages.filter(img => img.category === selectedCategory);
+    return filtered.slice(0, loadedCount);
+  }, [selectedCategory, loadedCount]);
 
-  const loadMoreImages = async () => {
+  // Intersection Observer for infinite scroll
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !isLoadingMore && loadedCount < allImages.length) {
+          loadMoreImages();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (loadMoreRef.current) {
+      observer.observe(loadMoreRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [isLoadingMore, loadedCount]);
+
+  const loadMoreImages = useCallback(() => {
+    if (isLoadingMore || loadedCount >= allImages.length) return;
+    
     setIsLoadingMore(true);
-    // Simulate loading more images
+    // Load 6 more images at a time for better performance
     setTimeout(() => {
-      const newImages = lazyImages.slice(0, 10).map(img => ({
-        img: img.src,
-        category: img.category
-      }));
-      setLoadedImages(prev => [...prev, ...newImages]);
+      setLoadedCount(prev => Math.min(prev + 6, allImages.length));
       setIsLoadingMore(false);
-    }, 500);
-  };
+    }, 200);
+  }, [isLoadingMore, loadedCount]);
 
+  // Simplified animations for better performance
   const container = {
     hidden: { opacity: 0 },
-    show: { opacity: 1, transition: { staggerChildren: 0.03 } }
+    show: { opacity: 1, transition: { staggerChildren: 0.01 } }
   };
 
   const item = {
-    hidden: { opacity: 0, y: 10 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.25 } }
+    hidden: { opacity: 0, y: 5 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.15 } }
   };
 
   return (
@@ -147,51 +161,62 @@ export function GalleryPageOptimized() {
           ))}
         </motion.div>
 
-        {/* Images Grid */}
-        <motion.div 
-          variants={container} 
-          initial="hidden" 
-          animate="show" 
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
+        {/* Images Masonry - Optimized */}
+        <motion.div
+          initial={{ opacity: 0, y: 5 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.2 }}
+          className="columns-2 sm:columns-2 md:columns-3 lg:columns-4 gap-4 [column-fill:_balance]"
         >
-          {filteredImages.map((image, index) => (
-            <motion.div 
-              key={index} 
-              variants={item} 
-              whileHover={{ scale: 1.02 }} 
-              className="group rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300"
-            >
-              <div className="aspect-square overflow-hidden">
-                <ImageWithFallback
-                  src={image.img}
-                  alt={`Gallery image ${index + 1}`}
-                  width={300}
-                  height={300}
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                  quality={80}
-                />
-              </div>
-            </motion.div>
-          ))}
+          {filteredImages.length > 0 ? (
+            filteredImages.map((image, index) => {
+              const aspectClass =
+                index % 6 === 0 ? "aspect-[3/4]" :
+                index % 6 === 1 ? "aspect-[4/3]" :
+                index % 6 === 2 ? "aspect-[1/1]" :
+                index % 6 === 3 ? "aspect-[2/3]" :
+                index % 6 === 4 ? "aspect-[5/4]" :
+                                  "aspect-[4/5]";
+
+              return (
+                <div
+                  key={`${image.src}-${index}`}
+                  className="mb-4 break-inside-avoid rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-200 group"
+                >
+                  <div className={`relative w-full ${aspectClass} overflow-hidden`}>
+                    <Image
+                      src={image.src}
+                      alt={`Gallery image ${index + 1}`}
+                      fill
+                      sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                      className="object-cover group-hover:scale-105 transition-transform duration-200"
+                      loading="lazy"
+                      quality={75}
+                    />
+                  </div>
+                </div>
+              );
+            })
+          ) : (
+            <div className="col-span-full text-center py-8 text-gray-500">
+              No images found for the selected category.
+            </div>
+          )}
         </motion.div>
 
-        {/* Load More Button */}
-        {loadedImages.length < lazyImages.length + initialImages.length && (
-          <motion.div 
-            initial={{ opacity: 0 }} 
-            animate={{ opacity: 1 }} 
-            transition={{ duration: 0.4, delay: 0.3 }} 
-            className="text-center mt-8"
-          >
+
+        {/* Load More Button - Optimized */}
+        {loadedCount < allImages.length && (
+          <div className="text-center mt-8">
             <button
+              ref={loadMoreRef}
               onClick={loadMoreImages}
               disabled={isLoadingMore}
               className="px-6 py-3 bg-emerald-500 text-white rounded-full font-medium hover:bg-emerald-600 transition-colors duration-200 disabled:opacity-50"
             >
               {isLoadingMore ? "Loading..." : "Load More Images"}
             </button>
-          </motion.div>
+          </div>
         )}
       </div>
     </section>

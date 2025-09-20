@@ -25,10 +25,10 @@ interface GalleryItem {
   capacity: string;
   area: string;
   features: string[];
-  pricing?: string;
-  additionalImages?: StaticImageData[];
+  // pricing?: string;
+  // additionalImages?: StaticImageData[];
   rating?: number;
-  duration?: string;
+  // duration?: string;
 }
 
 export function HomeGallerySection() {
@@ -58,32 +58,10 @@ export function HomeGallerySection() {
         case 'ArrowLeft':
           e.preventDefault();
           // Navigate to previous thumbnail if available
-          if (selectedImage.additionalImages && selectedImage.additionalImages.length > 0) {
-            const currentIndex = selectedImage.additionalImages.findIndex(
-              img => img.src === selectedImage.image.src
-            );
-            if (currentIndex > 0) {
-              setSelectedImage(prev => prev ? {
-                ...prev,
-                image: selectedImage.additionalImages![currentIndex - 1]
-              } : prev);
-            }
-          }
-          break;
+          
         case 'ArrowRight':
           e.preventDefault();
-          // Navigate to next thumbnail if available
-          if (selectedImage.additionalImages && selectedImage.additionalImages.length > 0) {
-            const currentIndex = selectedImage.additionalImages.findIndex(
-              img => img.src === selectedImage.image.src
-            );
-            if (currentIndex < selectedImage.additionalImages.length - 1) {
-              setSelectedImage(prev => prev ? {
-                ...prev,
-                image: selectedImage.additionalImages![currentIndex + 1]
-              } : prev);
-            }
-          }
+         
           break;
       }
     };
@@ -104,10 +82,10 @@ export function HomeGallerySection() {
         capacity: "50-100 people",
         area: "2,500 sq ft",
         features: ["Natural Rock Formation", "Tropical Vegetation", "Photo Opportunities", "Peaceful Ambiance"],
-        pricing: "Included with resort stay",
+        // pricing: "Included with resort stay",
     
         rating: 4.8,
-      duration: "2-3 hours"
+      // duration: "2-3 hours"
       },
       {
         id: "lush-green-lawns",
@@ -120,10 +98,10 @@ export function HomeGallerySection() {
         capacity: "200-500 people",
         area: "15,000 sq ft",
         features: ["Well-Maintained Grass", "Panoramic Views", "Event Setup Available", "Outdoor Seating"],
-        pricing: "Starting from $2,500 per event",
+        // pricing: "Starting from $2,500 per event",
     
         rating: 4.9,
-      duration: "All day"
+      // duration: "All day"
       },
       {
         id: "kids-adventure-zone",
@@ -136,10 +114,10 @@ export function HomeGallerySection() {
         capacity: "30-50 children",
         area: "3,000 sq ft",
         features: ["Age-Appropriate Equipment", "Soft Play Areas", "Supervised Activities", "Safety First"],
-        pricing: "Included with family packages",
+        // pricing: "Included with family packages",
     
         rating: 4.7,
-      duration: "1-2 hours"
+      // duration: "1-2 hours"
       },
       {
         id: "luxury-rooms",
@@ -152,10 +130,10 @@ export function HomeGallerySection() {
         capacity: "2-4 guests",
         area: "400-600 sq ft",
         features: ["Modern Amenities", "Scenic Views", "Premium Bedding", "Private Balcony"],
-        pricing: "Starting from $150 per night",
+        // pricing: "Starting from $150 per night",
     
         rating: 4.9,
-      duration: "Overnight"
+      // duration: "Overnight"
       },
       {
         id: "fine-dining",
@@ -168,10 +146,10 @@ export function HomeGallerySection() {
         capacity: "80-120 guests",
         area: "2,000 sq ft",
         features: ["Expert Chefs", "Fresh Ingredients", "Elegant Atmosphere", "Wine Selection"],
-        pricing: "Starting from $45 per person",
+        // pricing: "Starting from $45 per person",
     
         rating: 4.8,
-      duration: "1-2 hours"
+      // duration: "1-2 hours"
       },
       {
         id: "wedding-venues",
@@ -184,10 +162,10 @@ export function HomeGallerySection() {
         capacity: "100-500 guests",
         area: "5,000-10,000 sq ft",
         features: ["Professional Planning", "Beautiful Decor", "Catering Services", "Photography Spots"],
-        pricing: "Starting from $5,000 per event",
+        // pricing: "Starting from $5,000 per event",
     
         rating: 4.9,
-      duration: "Full day"
+      // duration: "Full day"
     }
   ];
 
@@ -256,8 +234,8 @@ export function HomeGallerySection() {
         </DialogTitle>
         <DialogDescription className="sr-only">
           {selectedImage.detailedDescription}. Capacity: {selectedImage.capacity}. Area: {selectedImage.area}.
-          {selectedImage.duration && ` Duration: ${selectedImage.duration}.`}
-          {selectedImage.pricing && ` Pricing: ${selectedImage.pricing}.`}
+          {/* {selectedImage.duration && ` Duration: ${selectedImage.duration}.`} */}
+          {/* {selectedImage.pricing && ` Pricing: ${selectedImage.pricing}.`} */}
         </DialogDescription>
 
         {/* Main layout: allow scroll on mobile, contain on desktop */}
@@ -370,22 +348,22 @@ export function HomeGallerySection() {
                     </div>
                     <div className="font-semibold text-sm sm:text-base">{selectedImage.area}</div>
                   </div>
-                  {selectedImage.duration && (
+                  {/* {selectedImage.duration && (
                     <div className="rounded-lg p-3 sm:p-4 border border-neutral-200 bg-white dark:bg-white/10 dark:border-white/10">
                       <div className="text-emerald-700 dark:text-emerald-300 text-xs sm:text-sm font-medium mb-1">
                         Duration
                       </div>
                       <div className="font-semibold text-sm sm:text-base">{selectedImage.duration}</div>
                     </div>
-                  )}
-                  {selectedImage.pricing && (
+                  )} */}
+                  {/* {selectedImage.pricing && (
                     <div className="rounded-lg p-3 sm:p-4 border border-neutral-200 bg-white dark:bg-white/10 dark:border-white/10">
                       <div className="text-emerald-700 dark:text-emerald-300 text-xs sm:text-sm font-medium mb-1">
                         Pricing
                       </div>
                       <div className="font-semibold text-sm sm:text-base">{selectedImage.pricing}</div>
                     </div>
-                  )}
+                  )} */}
                 </div>
               </section>
 

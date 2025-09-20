@@ -35,12 +35,11 @@ interface Activity {
   iconBg: string; // tailwind bg (e.g., 'bg-emerald-100')
   features: string[];
   detailedDescription: string;
-  images: string[]; // absolute or public paths
   duration: string;
   location: string;
   maxParticipants: string;
   included: string[];
-  pricing: string;
+  // pricing: string;
 }
 
 export function ActivitiesSection() {
@@ -70,17 +69,12 @@ export function ActivitiesSection() {
         ],
         detailedDescription:
           "Experience the thrill of adventure in pristine natural surroundings. Our activities are designed to challenge and excite while ensuring your safety with professional guides and top-quality equipment.",
-        images: [
-          "/gallery/adventure-1.jpg",
-          "/gallery/adventure-2.jpg",
-          "/gallery/adventure-3.jpg",
-          "/gallery/adventure-4.jpg",
-        ],
+        
         duration: "2-4 hours",
         location: "Mountain Trail & Adventure Zone",
         maxParticipants: "8 people",
         included: ["Professional Guide", "Safety Equipment", "Water & Snacks", "First Aid Kit"],
-        pricing: "Starting from $89 per person",
+        // pricing: "Starting from $89 per person",
       },
       {
         icon: <Waves className="w-8 h-8 text-white" />,
@@ -92,17 +86,12 @@ export function ActivitiesSection() {
         features: ["Swimming Pool", "Water Zorbing", "Rain Dance"],
         detailedDescription:
           "Dive into crystal-clear waters and enjoy a variety of water-based activities—from peaceful swims to exciting water zorbing. Our facilities offer something for every water enthusiast.",
-        images: [
-          "/gallery/water-1.jpg",
-          "/gallery/water-2.jpg",
-          "/gallery/water-3.jpg",
-          "/gallery/water-4.jpg",
-        ],
+      
         duration: "1-3 hours",
         location: "Resort Lake & Swimming Pool",
         maxParticipants: "12 people",
         included: ["Water Equipment", "Life Jackets", "Changing Facilities", "Towel Service"],
-        pricing: "Starting from $65 per person",
+        // pricing: "Starting from $65 per person",
       },
       {
         icon: <Flower className="w-8 h-8 text-white" />,
@@ -119,7 +108,7 @@ export function ActivitiesSection() {
         location: "Wellness Center & Spa",
         maxParticipants: "6 people",
         included: ["Luxury Robes", "Aromatherapy", "Herbal Teas", "Relaxation Lounge"],
-        pricing: "Starting from $150 per person",
+        // pricing: "Starting from $150 per person",
       },
       {
         icon: <Users className="w-8 h-8 text-white" />,
@@ -145,17 +134,12 @@ export function ActivitiesSection() {
         ],
         detailedDescription:
           "Create lasting family memories with our specially designed family activities. Safe, fun, and engaging experiences that bring families together for quality time.",
-        images: [
-          "/gallery/family-1.jpg",
-          "/gallery/family-2.jpg",
-          "/gallery/family-3.jpg",
-          "/gallery/family-4.jpg",
-        ],
+        
         duration: "2-4 hours",
         location: "Family Activity Center",
         maxParticipants: "20 people",
         included: ["Child Supervision", "Safety Equipment", "Snacks & Drinks", "Activity Materials"],
-        pricing: "Starting from $45 per family",
+        // pricing: "Starting from $45 per family",
       },
       {
         icon: <Camera className="w-8 h-8 text-white" />,
@@ -174,17 +158,12 @@ export function ActivitiesSection() {
         ],
         detailedDescription:
           "Capture the beauty of our resort and surrounding nature with professional photography guidance. Learn composition techniques and create stunning memories.",
-        images: [
-          "/gallery/photography-1.jpg",
-          "/gallery/photography-2.jpg",
-          "/gallery/photography-3.jpg",
-          "/gallery/photography-4.jpg",
-        ],
+       
         duration: "2-3 hours",
         location: "Nature Trails & Resort Grounds",
         maxParticipants: "6 people",
         included: ["Professional Photographer", "Camera Equipment", "Photo Editing", "Digital Gallery"],
-        pricing: "Starting from $95 per person",
+        // pricing: "Starting from $95 per person",
       },
       {
         icon: <Bike className="w-8 h-8 text-white" />,
@@ -203,17 +182,12 @@ export function ActivitiesSection() {
         ],
         detailedDescription:
           "Explore the charm of traditional and modern rides. From horse and camel rides to cycling and tractor tours, experience fun and adventure while connecting with nature and culture.",
-        images: [
-          "/gallery/riding-1.jpg",
-          "/gallery/riding-2.jpg",
-          "/gallery/riding-3.jpg",
-          "/gallery/riding-4.jpg",
-        ],
+       
         duration: "2-3 hours",
         location: "Resort Grounds & Riding Trails",
         maxParticipants: "10 people",
         included: ["Safety Helmets", "Trained Instructors", "Refreshments", "Basic Riding Gear"],
-        pricing: "Starting from $75 per person",
+        // pricing: "Starting from $75 per person",
       },
       {
         icon: <Utensils className="w-8 h-8 text-white" />,
@@ -239,12 +213,12 @@ export function ActivitiesSection() {
         ],
         detailedDescription:
           "Savor delicious cuisines with our curated food and beverage experiences. From fine dining to seasonal specialties and live kitchen counters, there’s something for everyone to enjoy.",
-        images: ["/gallery/food-1.jpg", "/gallery/food-2.jpg", "/gallery/food-3.jpg", "/gallery/food-4.jpg"],
+        // images: ["/gallery/food-1.jpg", "/gallery/food-2.jpg", "/gallery/food-3.jpg", "/gallery/food-4.jpg"],
         duration: "Flexible",
         location: "Dining Halls & Outdoor Venues",
         maxParticipants: "Unlimited",
         included: ["Buffet Access", "Beverages", "Seasonal Specials", "Desserts"],
-        pricing: "Included with packages / À la carte options",
+        // pricing: "Included with packages / À la carte options",
       },
     ],
     []
@@ -278,28 +252,18 @@ export function ActivitiesSection() {
     }, 150);
   }, []);
 
-  const nextImage = useCallback(() => {
-    if (!selectedActivity?.images?.length) return;
-    setCurrentImageIndex((prev) => (prev === selectedActivity.images.length - 1 ? 0 : prev + 1));
-  }, [selectedActivity]);
-
-  const prevImage = useCallback(() => {
-    if (!selectedActivity?.images?.length) return;
-    setCurrentImageIndex((prev) => (prev === 0 ? selectedActivity.images.length - 1 : prev - 1));
-  }, [selectedActivity]);
-
+  
   // Keyboard navigation inside modal
   useEffect(() => {
     if (!isModalOpen) return;
     const onKey = (e: KeyboardEvent) => {
       if (!selectedActivity) return;
       if (e.key === "Escape") closeModal();
-      if (e.key === "ArrowRight") nextImage();
-      if (e.key === "ArrowLeft") prevImage();
+    
     };
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
-  }, [isModalOpen, selectedActivity, closeModal, nextImage, prevImage]);
+  }, [isModalOpen, selectedActivity, closeModal]);
 
   return (
     <section className="py-20 sm:py-28 relative overflow-hidden bg-gradient-to-br from-indigo-50 via-white to-cyan-50">
@@ -393,7 +357,7 @@ export function ActivitiesSection() {
       </DialogTitle>
       <DialogDescription>
         {selectedActivity
-          ? `${selectedActivity.location} · ${selectedActivity.duration} · ${selectedActivity.pricing}`
+          ? `${selectedActivity.location} `
           : "Details about the selected activity"}
       </DialogDescription>
     </DialogHeader>
@@ -449,7 +413,7 @@ export function ActivitiesSection() {
                 </div>
                 <div>
                   <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">{selectedActivity.title}</h2>
-                  <p className="text-emerald-700 font-semibold">{selectedActivity.pricing}</p>
+                  {/* <p className="text-emerald-700 font-semibold">{selectedActivity.pricing}</p> */}
                 </div>
               </div>
               <div className="hidden sm:flex items-center gap-2 text-yellow-500">
@@ -488,13 +452,13 @@ export function ActivitiesSection() {
                     <p className="font-semibold text-gray-900">{selectedActivity.maxParticipants}</p>
                   </div>
                 </div>
-                <div className="flex items-center gap-3 p-3 bg-green-50 rounded-xl border border-green-100">
+                {/* <div className="flex items-center gap-3 p-3 bg-green-50 rounded-xl border border-green-100">
                   <Star className="w-5 h-5 text-yellow-500 fill-current" />
                   <div>
                     <p className="text-xs text-gray-600">Price</p>
                     <p className="font-semibold text-green-700">{selectedActivity.pricing}</p>
                   </div>
-                </div>
+                </div> */}
               </div>
 
               {/* Included */}

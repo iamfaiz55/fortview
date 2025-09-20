@@ -47,8 +47,8 @@ export function GalleryPreviewPage() {
       capacity: "50-100 people",
       area: "2,500 sq ft",
       features: ["Natural Rock Formation", "Tropical Vegetation", "Photo Opportunities", "Peaceful Ambiance"],
-      pricing: "Included with resort stay",
-      additionalImages: [adventure1, adventure2]
+      // pricing: "Included with resort stay",
+      // additionalImages: [adventure1, adventure2]
     },
     {
       id: "lush-green-lawns",
@@ -61,8 +61,8 @@ export function GalleryPreviewPage() {
       capacity: "200-500 people",
       area: "15,000 sq ft",
       features: ["Well-Maintained Grass", "Panoramic Views", "Event Setup Available", "Outdoor Seating"],
-      pricing: "Starting from $2,500 per event",
-      additionalImages: [outdoor1, turf]
+      // pricing: "Starting from $2,500 per event",
+      // additionalImages: [outdoor1, turf]
     },
     {
       id: "kids-adventure-zone",
@@ -75,8 +75,8 @@ export function GalleryPreviewPage() {
       capacity: "30-50 children",
       area: "3,000 sq ft",
       features: ["Age-Appropriate Equipment", "Soft Play Areas", "Supervised Activities", "Safety First"],
-      pricing: "Included with family packages",
-      additionalImages: [adventure2, adventure1]
+      // pricing: "Included with family packages",
+      // additionalImages: [adventure2, adventure1]
     }
   ];
 
@@ -180,7 +180,7 @@ export function GalleryPreviewPage() {
                     </div>
 
                     {/* Image Indicators */}
-                    <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex space-x-3">
+                    {/* <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex space-x-3">
                       {selectedItem.additionalImages.map((_: any, index: number) => (
                         <button
                           key={index}
@@ -192,7 +192,7 @@ export function GalleryPreviewPage() {
                           }`}
                         />
                       ))}
-                    </div>
+                    </div> */}
                   </>
                 )}
               </div>
@@ -234,15 +234,7 @@ export function GalleryPreviewPage() {
                     <p className="text-lg font-bold text-gray-900">{selectedItem.area}</p>
                   </div>
                 </div>
-                {selectedItem.pricing && (
-                  <div className="flex items-center space-x-4 p-6 bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl shadow-md col-span-1 sm:col-span-2">
-                    <Star className="w-6 h-6 text-yellow-500 fill-current" />
-                    <div>
-                      <p className="text-sm text-gray-500 font-medium">Pricing</p>
-                      <p className="text-lg font-bold text-green-700">{selectedItem.pricing}</p>
-                    </div>
-                  </div>
-                )}
+              
               </div>
 
               {/* Features */}

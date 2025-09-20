@@ -5,6 +5,7 @@ const nextConfig: NextConfig = {
     domains: ["fortviewresort.com", "images.unsplash.com"],
     formats: ['image/webp', 'image/avif'],
     minimumCacheTTL: 60,
+    qualities: [25, 50, 75, 80, 85, 90, 100],
   },
   experimental: {
     optimizePackageImports: ['framer-motion', 'lucide-react'],
