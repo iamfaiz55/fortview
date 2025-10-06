@@ -76,7 +76,7 @@ export interface ReorderBanquetVenuesRequest {
 export const banquetVenueApi = createApi({
   reducerPath: 'banquetVenueApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: `${process.env.NEXT_PUBLIC_API_URL}/banquet-venues`,
+    baseUrl: `${(process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api').replace(/\/$/, '')}/banquet-venues`,
     prepareHeaders: (headers) => {
       const token = localStorage.getItem('token');
       if (token) {
