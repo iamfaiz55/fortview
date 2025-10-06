@@ -76,7 +76,7 @@ export interface ReorderBanquetVenuesRequest {
 export const banquetVenueApi = createApi({
   reducerPath: 'banquetVenueApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: `${(process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api').replace(/\/$/, '')}/banquet-venues`,
+    baseUrl: `https://fortview-backend.vercel.app/api/banquet-venues`,
     prepareHeaders: (headers) => {
       const token = localStorage.getItem('token');
       if (token) {

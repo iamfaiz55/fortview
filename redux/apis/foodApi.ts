@@ -73,7 +73,7 @@ export interface FoodQueryParams {
 export const foodApi = createApi({
   reducerPath: 'foodApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: `${process.env.NEXT_PUBLIC_API_URL}/foods`,
+    baseUrl: `https://fortview-backend.vercel.app/api/foods`,
     prepareHeaders: (headers, { getState }) => {
       const token = (getState() as RootState).auth.token;
       if (token) {

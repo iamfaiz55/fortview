@@ -72,7 +72,7 @@ export interface FoodStallQueryParams {
 export const foodStallApi = createApi({
   reducerPath: 'foodStallApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: `${process.env.NEXT_PUBLIC_API_URL}/food-stalls`,
+    baseUrl: `https://fortview-backend.vercel.app/api/food-stalls`,
     prepareHeaders: (headers, { getState }) => {
       const token = (getState() as RootState).auth.token;
       if (token) {

@@ -57,7 +57,7 @@ export interface ReorderEventsRequest {
 export const eventApi = createApi({
   reducerPath: 'eventApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'}/events`,
+    baseUrl: ` 'https://fortview-backend.vercel.app/api/events`,
     prepareHeaders: (headers) => {
       const token = localStorage.getItem('token');
       if (token) {

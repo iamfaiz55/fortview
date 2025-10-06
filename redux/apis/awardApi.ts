@@ -80,7 +80,7 @@ export interface AwardQueryParams {
 export const awardApi = createApi({
   reducerPath: 'awardApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: `${process.env.NEXT_PUBLIC_API_URL}/awards`,
+    baseUrl: `https://fortview-backend.vercel.app/api/awards`,
     prepareHeaders: (headers, { getState }) => {
       const token = (getState() as RootState).auth.token;
       if (token) {

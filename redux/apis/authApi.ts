@@ -12,7 +12,7 @@ export interface IUser {
 export const authApi = createApi({
   reducerPath: 'authApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api',
+    baseUrl:  'https://fortview-backend.vercel.app/api',
     credentials: 'include',
     prepareHeaders: (headers, { getState, endpoint }) => {
       // Only attach token for protected endpoints
