@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { usePathname } from "next/navigation";
+import { RoutePrefetcher } from "./RoutePrefetcher";
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -23,9 +24,9 @@ export function Header() {
 
     // Preload all navigation pages
     const pagesToPreload = [
-      '/resort/gallery', '/resort/selfie-points', '/resort/events', '/resort/bird-zone', 
+      '/resort/gallery', '/resort/games', '/resort/selfie-points', '/resort/events', '/resort/bird-zone', 
       '/resort/rooms', '/resort/adventure-activities', '/resort/banquet-venues', 
-      '/resort/dining', '/resort/spa-wellness', '/resort/contact'
+      '/resort/foods', '/resort/food-stalls', '/resort/spa-wellness', '/resort/awards', '/resort/contact'
     ];
 
     // Preload after a short delay to not block initial render
@@ -38,20 +39,22 @@ export function Header() {
 
   const navItems = [
     { name: "Gallery", page: "/resort/gallery" },
+    { name: "Games & Activities", page: "/resort/games" },
     { name: "Selfie Points", page: "/resort/selfie-points" },
     { name: "Events", page: "/resort/events" },
     { name: "Bird & Animal Zone", page: "/resort/bird-zone" },
     { name: "Rooms", page: "/resort/rooms" },
     { name: "Adventure Activities", page: "/resort/adventure-activities" },
     { name: "Banquet Venues", page: "/resort/banquet-venues" },
-    { name: "Dining", page: "/resort/dining" },
-    { name: "Spa & Wellness", page: "/resort/spa-wellness" }
+    { name: "Spa & Wellness", page: "/resort/spa-wellness" },
+    { name: "Awards", page: "/resort/awards" }
   ];
 
   const groups: { label: string; items: { name: string; page: string }[] }[] = [
     {
       label: "Experiences",
       items: [
+        { name: "Games & Activities", page: "/resort/games" },
         { name: "Adventure Activities", page: "/resort/adventure-activities" },
         { name: "Selfie Points", page: "/resort/selfie-points" },
         { name: "Events", page: "/resort/events" },
@@ -65,17 +68,25 @@ export function Header() {
         { name: "Rooms", page: "/resort/rooms" },
       ],
     },
-    { label: "Dining", items: [{ name: "Dining", page: "/resort/dining" }] },
+    { 
+      label: "Dining", 
+      items: [
+        { name: "Food Menu", page: "/resort/foods" },
+        { name: "Food Stalls", page: "/resort/food-stalls" }
+      ] 
+    },
     { label: "Gallery", items: [{ name: "Gallery", page: "/resort/gallery" }] },
     { label: "Spa & Wellness", items: [{ name: "Spa & Wellness", page: "/resort/spa-wellness" }] },
+    { label: "Awards", items: [{ name: "Awards", page: "/resort/awards" }] },
     { label: "Contact", items: [{ name: "Contact", page: "/resort/contact" }] },
   ];
 
   return (
-    <header className="fixed top-4 left-4 right-4 z-50">
+<header className="fixed top-0 left-0 right-0 z-[100] isolation-isolate px-4 md:px-6">
+
       {/* Cloudy animated background with rounded corners */}
-      <div className="absolute inset-0 bg-white/95 backdrop-blur-xl rounded-2xl shadow-lg border border-white/20">
-        <div className="absolute inset-0 overflow-hidden rounded-2xl">
+      <div className="absolute inset-0 bg-white/95 backdrop-blur-xl rounded-b-2xl shadow-lg border border-white/20 pointer-events-none -z-10">
+      <div className="absolute inset-0 overflow-hidden rounded-2xl">
           <motion.div
             className="absolute -top-16 -left-16 w-48 h-48 bg-gradient-to-br from-emerald-300/50 to-teal-300/50 rounded-full blur-3xl"
             animate={{
@@ -135,7 +146,7 @@ export function Header() {
       </div>
       
       {/* Main header content */}
-      <div className="relative container mx-auto px-6">
+      <div className="relative max-w-7xl mx-auto">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link 
@@ -283,24 +294,59 @@ export function Header() {
             >
               <div className="py-6 bg-white/95 backdrop-blur-xl max-h-[calc(100vh-6rem)] overflow-y-auto rounded-2xl shadow-xl border border-white/20">
                 <nav className="flex flex-col space-y-2 px-2">
-                  {navItems.map((item, index) => (
-                    <Link key={item.name} href={item.page}>
-                      <motion.div
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: index * 0.12 }}
-                        onClick={() => setIsMenuOpen(false)}
-                        whileHover={{ scale: 1.01 }}
-                        className={`text-left py-3 px-4 rounded-xl transition-all duration-300 cursor-pointer ${
-                          currentPage === item.page 
-                            ? "bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-lg" 
-                            : "text-gray-700 hover:text-emerald-600 hover:bg-emerald-50"
-                        }`}
-                      >
-                        {item.name}
-                      </motion.div>
-                    </Link>
-                  ))}
+                  {groups.map((group, gIdx) => {
+                    const isSingle = group.items.length === 1;
+                    if (isSingle) {
+                      const item = group.items[0];
+                      return (
+                        <Link key={`${group.label}-${item.name}`} href={item.page}>
+                          <motion.div
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: gIdx * 0.08 }}
+                            onClick={() => setIsMenuOpen(false)}
+                            whileHover={{ scale: 1.01 }}
+                            className={`text-left py-3 px-4 rounded-xl transition-all duration-300 cursor-pointer ${
+                              currentPage === item.page 
+                                ? "bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-lg" 
+                                : "text-gray-700 hover:text-emerald-600 hover:bg-emerald-50"
+                            }`}
+                          >
+                            {group.label}
+                          </motion.div>
+                        </Link>
+                      );
+                    }
+
+                    // Group with multiple items (e.g., Dining)
+                    return (
+                      <div key={group.label} className="px-1">
+                        <div className="text-xs uppercase tracking-wide text-gray-500 px-3 pb-1 pt-3">
+                          {group.label}
+                        </div>
+                        <div className="flex flex-col">
+                          {group.items.map((it, idx) => (
+                            <Link key={`${group.label}-${it.name}`} href={it.page}>
+                              <motion.div
+                                initial={{ opacity: 0, x: -20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ delay: gIdx * 0.08 + idx * 0.05 }}
+                                onClick={() => setIsMenuOpen(false)}
+                                whileHover={{ scale: 1.01 }}
+                                className={`ml-2 text-left py-2.5 px-4 rounded-lg transition-all duration-300 cursor-pointer ${
+                                  currentPage === it.page 
+                                    ? "bg-emerald-50 text-emerald-700" 
+                                    : "text-gray-700 hover:text-emerald-600 hover:bg-emerald-50"
+                                }`}
+                              >
+                                {it.name}
+                              </motion.div>
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    );
+                  })}
                 </nav>
                 
                 <motion.div 

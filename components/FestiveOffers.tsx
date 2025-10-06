@@ -1,68 +1,51 @@
 "use client"
 import { FestiveOfferPopup, useFestiveOfferPopup } from "./FestiveOfferPopup";
+import { useGetActiveOffersQuery } from "@/redux/apis/offerApi";
+import { useEffect, useState } from "react";
 
-// Festival offer configurations
-export const festivalOffers = {
-  diwali: {
-    festival: "diwali" as const,
-    title: "Diwali Special! 🪔",
-    subtitle: "Light up your holidays with our exclusive offers",
-    offer: "Book your stay during the Festival of Lights",
-    discount: "UP TO 40% OFF",
-    validUntil: "November 15, 2024",
-    ctaText: "Book Now & Celebrate Diwali"
-  },
-  holi: {
-    festival: "holi" as const,
-    title: "Holi Celebration! 🌈",
-    subtitle: "Join us for the most colorful festival",
-    offer: "Special Holi packages with traditional celebrations",
-    discount: "30% OFF",
-    validUntil: "March 25, 2024",
-    ctaText: "Join Holi Festivities"
-  },
-  general: {
-    festival: "general" as const,
-    title: "Special Offer! ✨",
-    subtitle: "Exclusive deals just for you",
-    offer: "Book your perfect getaway today",
-    discount: "25% OFF",
-    validUntil: "December 31, 2024",
-    ctaText: "Claim Your Offer"
-  }
-};
+// Hook to get the first active offer
+function useBestOffer() {
+  const { data: offers = [], isLoading, error } = useGetActiveOffersQuery();
+  const [bestOffer, setBestOffer] = useState<any | null>(null);
 
-// Function to get current festival based on date
-export function getCurrentFestival() {
-  const now = new Date();
-  const month = now.getMonth() + 1; // 1-12
-  const day = now.getDate();
+  useEffect(() => {
+    console.log('Offers data:', { offers, isLoading, error });
+    
+    if (offers.length > 0) {
+      // Get the first active offer (ordered by order field)
+      const selectedOffer = offers[0];
+      console.log('Selected offer:', selectedOffer);
+      
+      if (selectedOffer && selectedOffer.image?.url) {
+        setBestOffer({
+          imageUrl: selectedOffer.image.url
+        });
+        console.log('Best offer set:', selectedOffer.image.url);
+      }
+    }
+  }, [offers, isLoading, error]);
 
-  // Diwali (October-November)
-  if (month === 10 || month === 11) {
-    return "diwali";
-  }
-  
-  // Holi (March)
-  if (month === 3) {
-    return "holi";
-  }
-
-  // Default to general offer
-  return "general";
+  return { bestOffer, isLoading, error };
 }
 
 // Main component that shows the appropriate popup
 export function FestiveOfferManager() {
-  const { isOpen, closePopup, handleCtaClick } = useFestiveOfferPopup();
-  const currentFestival = getCurrentFestival();
-  const offer = festivalOffers[currentFestival];
+  const { bestOffer, isLoading, error } = useBestOffer();
+  const { isOpen, closePopup, handleCtaClick } = useFestiveOfferPopup(2); // 2 second delay
+
+  console.log('FestiveOfferManager state:', { bestOffer, isLoading, error, isOpen });
+
+  // Don't show popup if loading, error, or no offer available
+  if (isLoading || error || !bestOffer) {
+    console.log('Not showing popup because:', { isLoading, error, hasBestOffer: !!bestOffer });
+    return null;
+  }
 
   return (
     <>
-      {isOpen && (
+      {isOpen && bestOffer && (
         <FestiveOfferPopup
-          {...offer}
+          imageUrl={bestOffer.imageUrl}
           onClose={closePopup}
           onCtaClick={handleCtaClick}
         />
@@ -71,51 +54,3 @@ export function FestiveOfferManager() {
   );
 }
 
-// Individual festival popup components for manual control
-export function DiwaliOfferPopup() {
-  const { isOpen, closePopup, handleCtaClick } = useFestiveOfferPopup();
-
-  return (
-    <>
-      {isOpen && (
-        <FestiveOfferPopup
-          {...festivalOffers.diwali}
-          onClose={closePopup}
-          onCtaClick={handleCtaClick}
-        />
-      )}
-    </>
-  );
-}
-
-export function HoliOfferPopup() {
-  const { isOpen, closePopup, handleCtaClick } = useFestiveOfferPopup();
-
-  return (
-    <>
-      {isOpen && (
-        <FestiveOfferPopup
-          {...festivalOffers.holi}
-          onClose={closePopup}
-          onCtaClick={handleCtaClick}
-        />
-      )}
-    </>
-  );
-}
-
-export function GeneralOfferPopup() {
-  const { isOpen, closePopup, handleCtaClick } = useFestiveOfferPopup();
-
-  return (
-    <>
-      {isOpen && (
-        <FestiveOfferPopup
-          {...festivalOffers.general}
-          onClose={closePopup}
-          onCtaClick={handleCtaClick}
-        />
-      )}
-    </>
-  );
-}

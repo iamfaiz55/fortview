@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Cormorant_Garamond, Crimson_Text } from "next/font/google";
 import "./globals.css";
 import { PerformanceMonitor } from "@/components/PerformanceMonitor";
+import { PerformanceOptimizer } from "@/components/PerformanceOptimizer";
+import { ReduxProvider } from "@/components/providers/ReduxProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -86,8 +88,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${headingSerif.variable} ${bodySerif.variable} antialiased`}
       >
-        <PerformanceMonitor />
-        {children}
+        <ReduxProvider>
+          <PerformanceMonitor />
+          <PerformanceOptimizer />
+          {children}
+        </ReduxProvider>
       </body>
     </html>
   );

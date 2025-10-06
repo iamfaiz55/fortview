@@ -1,24 +1,28 @@
-import { ActivitiesSection } from "@/components/ActivitiesSection";
 import { CTASection } from "@/components/CTASection";
 import { Footer } from "@/components/Footer";
-import { HomeGallerySection } from "@/components/HomeGallerySection";
 import { Header } from "@/components/Header";
-import { HeroSection } from "@/components/HeroSection";
+import { DynamicHeroSection } from "@/components/DynamicHeroSection";
 import { AboutSection } from "@/components/AboutSection";
 import { PreFooterCTA } from "@/components/PreFooterCTA";
+import { HomeGallerySection } from "@/components/HomeGallerySection";
+import { HomeGamesSection } from "@/components/HomeGamesSection";
+import { ActivitiesSection } from "@/components/ActivitiesSection";
 import { FestiveOfferManager } from "@/components/FestiveOffers";
+import AwardsSection from "@/components/AwardsSection";
 
 export default function Home() {
   return (
     <div className="min-h-screen">
       <Header />
       <main>
-        <HeroSection />
+        <DynamicHeroSection />
         <HomeGallerySection />
+        <HomeGamesSection />
         <AboutSection />
         <ActivitiesSection />
         <CTASection />
         <PreFooterCTA />
+        <AwardsSection />
       </main>
       <Footer />
       

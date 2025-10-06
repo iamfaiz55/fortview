@@ -1,11 +1,13 @@
 "use client"
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { Card, CardContent } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
+import { useGetAdventureActivitiesQuery } from "@/redux/apis/adventureActivityApi";
+import { AdventureActivity } from "@/redux/apis/adventureActivityApi";
 import { 
   Gamepad2, 
   Circle, 
@@ -21,8 +23,28 @@ import {
   Users,
   Star,
   CalendarDays,
-  Filter
+  Filter,
+  Activity,
+  Loader2
 } from "lucide-react";
+
+// Helper function to get icon component
+const getIconComponent = (iconName: string) => {
+  const iconMap: { [key: string]: React.ReactNode } = {
+    Gamepad2: <Gamepad2 className="w-6 h-6" />,
+    Circle: <Circle className="w-6 h-6" />,
+    Mountain: <Mountain className="w-6 h-6" />,
+    Zap: <Zap className="w-6 h-6" />,
+    Target: <Target className="w-6 h-6" />,
+    Waves: <Waves className="w-6 h-6" />,
+    Droplets: <Droplets className="w-6 h-6" />,
+    CloudRain: <CloudRain className="w-6 h-6" />,
+    Baby: <Baby className="w-6 h-6" />,
+    PlayCircle: <PlayCircle className="w-6 h-6" />,
+    Activity: <Activity className="w-6 h-6" />,
+  };
+  return iconMap[iconName] || <Activity className="w-6 h-6" />;
+};
 
 export function AdventureActivitiesPage() {
   const [selectedCategory, setSelectedCategory] = useState("all");
@@ -30,155 +52,17 @@ export function AdventureActivitiesPage() {
   const [difficultyFilter, setDifficultyFilter] = useState("all");
   const [timingFilter, setTimingFilter] = useState("all");
 
-  const activities = [
-    // Indoor Games
-    {
-      id: 1,
-      name: "Pool/Billiards",
-      category: "indoor",
-      description: "Classic 8-ball and 9-ball pool games in our professionally maintained billiards room",
-      image: "https://images.unsplash.com/photo-1694887916265-067cc5eb0a6c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxiaWxsaWFyZHMlMjBwb29sJTIwdGFibGUlMjBpbmRvb3J8ZW58MXx8fHwxNzU3NDMyMjcyfDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
-      icon: <Gamepad2 className="w-6 h-6" />,
-      ageGroup: "teens-adults",
-      difficulty: "easy",
-      timing: "all-day",
-      duration: "30-60 mins",
-      capacity: "2-4 players",
-      highlights: ["Professional tables", "All equipment included", "Tournament style"]
-    },
-    {
-      id: 2,
-      name: "Table Tennis",
-      category: "indoor",
-      description: "Fast-paced ping pong matches with high-quality tables and professional equipment",
-      image: "https://images.unsplash.com/photo-1705087917495-8530cbaa858e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx0YWJsZSUyMHRlbm5pcyUyMHBpbmclMjBwb25nJTIwaW5kb29yfGVufDF8fHx8MTc1NzQzMjI3Mnww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
-      icon: <Circle className="w-6 h-6" />,
-      ageGroup: "all-ages",
-      difficulty: "easy",
-      timing: "all-day",
-      duration: "20-45 mins",
-      capacity: "2-4 players",
-      highlights: ["Olympic standard tables", "Coaching available", "Family friendly"]
-    },
+  // Fetch adventure activities from API
+  const { data: activitiesResponse, isLoading, error } = useGetAdventureActivitiesQuery({ 
+    active: true,
+    category: selectedCategory !== "all" ? selectedCategory : undefined,
+    ageGroup: ageFilter !== "all" ? ageFilter : undefined,
+    difficulty: difficultyFilter !== "all" ? difficultyFilter : undefined,
+    timing: timingFilter !== "all" ? timingFilter : undefined,
+  });
 
-    // Outdoor Games
-    {
-      id: 3,
-      name: "Mountain Trekking",
-      category: "outdoor",
-      description: "Guided nature treks through scenic mountain trails with breathtaking valley views",
-      image: "https://images.unsplash.com/photo-1615472767332-e5615c7e617a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb3VudGFpbiUyMHRyZWtraW5nJTIwaGlraW5nJTIwYWR2ZW50dXJlfGVufDF8fHx8MTc1NzQzMjI3M3ww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
-      icon: <Mountain className="w-6 h-6" />,
-      ageGroup: "teens-adults",
-      difficulty: "moderate",
-      timing: "morning-evening",
-      duration: "2-4 hours",
-      capacity: "6-15 people",
-      highlights: ["Expert guides", "Safety equipment", "Stunning views"]
-    },
-    {
-      id: 4,
-      name: "Zipline Adventure",
-      category: "outdoor",
-      description: "Soar through the canopy on our thrilling zipline course with multiple platforms",
-      image: "https://images.unsplash.com/photo-1550310349-1ddd397b3ff1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx6aXBsaW5lJTIwYWR2ZW50dXJlJTIwZm9yZXN0fGVufDF8fHx8MTc1NzM2NTE1NXww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
-      icon: <Zap className="w-6 h-6" />,
-      ageGroup: "teens-adults",
-      difficulty: "moderate",
-      timing: "morning-evening",
-      duration: "45-90 mins",
-      capacity: "1-8 people",
-      highlights: ["500m course", "Safety certified", "Photo service"]
-    },
-    {
-      id: 5,
-      name: "Obstacle Course",
-      category: "outdoor",
-      description: "Challenge yourself on our multi-level obstacle course with rope climbs and balance beams",
-      image: "https://images.unsplash.com/photo-1734445559604-ae06dec16520?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxvYnN0YWNsZSUyMGNvdXJzZSUyMG91dGRvb3IlMjBhZHZlbnR1cmV8ZW58MXx8fHwxNzU3NDMyMjczfDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
-      icon: <Target className="w-6 h-6" />,
-      ageGroup: "kids-adults",
-      difficulty: "moderate",
-      timing: "morning-evening",
-      duration: "30-60 mins",
-      capacity: "4-12 people",
-      highlights: ["Team building", "Different difficulty levels", "Timing challenges"]
-    },
-
-    // Water Activities
-    {
-      id: 6,
-      name: "Swimming Pool",
-      category: "water",
-      description: "Olympic-sized swimming pool with separate kids area, perfect for relaxation and fitness",
-      image: "https://images.unsplash.com/photo-1560850006-5837212e620b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzd2ltbWluZyUyMHBvb2wlMjByZXNvcnR8ZW58MXx8fHwxNzU3NDMyMjc0fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
-      icon: <Waves className="w-6 h-6" />,
-      ageGroup: "all-ages",
-      difficulty: "easy",
-      timing: "all-day",
-      duration: "Unlimited",
-      capacity: "50+ people",
-      highlights: ["Heated pool", "Lifeguard on duty", "Pool bar"]
-    },
-    {
-      id: 7,
-      name: "Water Zorbing",
-      category: "water",
-      description: "Roll and bounce inside giant transparent water balls for an unforgettable experience",
-      image: "https://images.unsplash.com/photo-1681161497001-e7fa23711e49?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxhZHZlbnR1cmUlMjByZXNvcnQlMjB3YXRlciUyMGFjdGl2aXRpZXMlMjB6aXBsaW5lfGVufDF8fHx8MTc1NzQzMjAxM3ww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
-      icon: <Droplets className="w-6 h-6" />,
-      ageGroup: "kids-adults",
-      difficulty: "easy",
-      timing: "morning-evening",
-      duration: "15-30 mins",
-      capacity: "1-2 people",
-      highlights: ["Unique experience", "Safe water landing", "Photo opportunities"]
-    },
-    {
-      id: 8,
-      name: "Rain Dance",
-      category: "water",
-      description: "Dance under artificial rain with music and lights for a refreshing party experience",
-      image: "https://images.unsplash.com/photo-1560850006-5837212e620b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzd2ltbWluZyUyMHBvb2wlMjByZXNvcnR8ZW58MXx8fHwxNzU3NDMyMjc0fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
-      icon: <CloudRain className="w-6 h-6" />,
-      ageGroup: "all-ages",
-      difficulty: "easy",
-      timing: "evening",
-      duration: "45-90 mins",
-      capacity: "20-50 people",
-      highlights: ["Live DJ", "Light effects", "Group activity"]
-    },
-
-    // Kids Zones
-    {
-      id: 9,
-      name: "Soft Play Area",
-      category: "kids",
-      description: "Safe indoor play area with soft foam structures, perfect for toddlers and young children",
-      image: "https://images.unsplash.com/photo-1716558833641-0a2ac4bc6849?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxraWRzJTIwcGxheWdyb3VuZCUyMHNvZnQlMjBwbGF5fGVufDF8fHx8MTc1NzQzMjI3NHww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
-      icon: <Baby className="w-6 h-6" />,
-      ageGroup: "kids",
-      difficulty: "easy",
-      timing: "all-day",
-      duration: "Unlimited",
-      capacity: "15-20 kids",
-      highlights: ["Age-appropriate", "Parent supervision area", "Safety certified"]
-    },
-    {
-      id: 10,
-      name: "Swing & Slides",
-      category: "kids",
-      description: "Colorful outdoor playground with swings, slides, and climbing frames for active play",
-      image: "https://images.unsplash.com/photo-1746010531584-b3a67fc697c7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjaGlsZHJlbiUyMHN3aW5nJTIwc2xpZGUlMjBwbGF5Z3JvdW5kfGVufDF8fHx8MTc1NzQzMjI3NXww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
-      icon: <PlayCircle className="w-6 h-6" />,
-      ageGroup: "kids",
-      difficulty: "easy",
-      timing: "all-day",
-      duration: "Unlimited",
-      capacity: "20-30 kids",
-      highlights: ["Multiple age groups", "Shaded areas", "Safety surfacing"]
-    }
-  ];
+  // Use API data if available, otherwise fallback
+  const activities = activitiesResponse?.data || [];
 
   const categories = [
     { id: "all", name: "All Activities", icon: <Star className="w-4 h-4" /> },
@@ -310,16 +194,43 @@ export function AdventureActivitiesPage() {
           </div>
         </motion.div>
 
+        {/* Loading State */}
+        {isLoading && (
+          <div className="grid lg:grid-cols-2 xl:grid-cols-3 gap-8">
+            {[...Array(6)].map((_, i) => (
+              <div key={i} className="bg-white rounded-2xl p-6 animate-pulse">
+                <div className="w-full h-48 bg-gray-200 rounded-xl mb-4"></div>
+                <div className="h-6 bg-gray-200 rounded mb-2"></div>
+                <div className="h-4 bg-gray-200 rounded mb-4"></div>
+                <div className="space-y-2">
+                  <div className="h-3 bg-gray-200 rounded"></div>
+                  <div className="h-3 bg-gray-200 rounded"></div>
+                  <div className="h-3 bg-gray-200 rounded w-3/4"></div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Error State */}
+        {error && (
+          <div className="text-center py-12">
+            <p className="text-red-600 mb-4">Failed to load activities</p>
+            <p className="text-gray-600">Please try again later</p>
+          </div>
+        )}
+
         {/* Activities Grid */}
-        <motion.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.6 }}
-          className="grid lg:grid-cols-2 xl:grid-cols-3 gap-8"
-        >
-          {filteredActivities.map((activity, index) => (
+        {!isLoading && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.6 }}
+            className="grid lg:grid-cols-2 xl:grid-cols-3 gap-8"
+          >
+            {filteredActivities.map((activity, index) => (
             <motion.div
-              key={activity.id}
+              key={activity._id}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: index * 0.05 }}
@@ -329,7 +240,7 @@ export function AdventureActivitiesPage() {
               <Card className="h-full overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 border-0 bg-white">
                 <div className="relative overflow-hidden">
                   <ImageWithFallback
-                    src={activity.image}
+                    src={activity.image?.url || "/placeholder-activity.jpg"}
                     alt={activity.name}
                     width={400}
                     height={192}
@@ -339,7 +250,7 @@ export function AdventureActivitiesPage() {
                   />
                   <div className="absolute top-4 left-4">
                     <div className="bg-white/90 backdrop-blur-sm rounded-full p-3 shadow-lg">
-                      {activity.icon}
+                      {getIconComponent(activity.icon)}
                     </div>
                   </div>
                   <div className="absolute top-4 right-4">
@@ -397,7 +308,8 @@ export function AdventureActivitiesPage() {
               </Card>
             </motion.div>
           ))}
-        </motion.div>
+          </motion.div>
+        )}
 
         {/* No Results */}
         {filteredActivities.length === 0 && (
